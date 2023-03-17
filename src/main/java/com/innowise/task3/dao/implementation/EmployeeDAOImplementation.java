@@ -15,6 +15,13 @@ import java.util.List;
 public class EmployeeDAOImplementation implements EmployeeDAO {
 
     public static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static {
+        try {
+            Class.forName(DB_DRIVER);
+        } catch (ClassNotFoundException e) { // TODO move to listener
+            throw new RuntimeException(e);
+        }
+    }
     public static final String DB_URL = "jdbc:mysql://127.0.0.1/employee-data-accounting?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     public static final String DB_USER = "root";
     public static final String DB_PASSWORD = "BebraBebra";
@@ -31,6 +38,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
     public static final String E_PASSWORD = "e_password";
     // TODO add custom exceptions
+    // TODO add commits and rollbacks
 
     @Override
     public List<Employee> getAllEmployees() {

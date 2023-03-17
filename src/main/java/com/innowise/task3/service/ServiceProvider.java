@@ -4,7 +4,7 @@ import com.innowise.task3.service.implementation.EmployeeServiceImplementation;
 
 public class ServiceProvider {
 
-    private final static ServiceProvider instance = new ServiceProvider();
+    private final static ServiceProvider INSTANCE = new ServiceProvider();
 
     private final EmployeeService employeeService = new EmployeeServiceImplementation();
 
@@ -15,6 +15,6 @@ public class ServiceProvider {
         return employeeService;
     }
     public static ServiceProvider getInstance() {
-        return instance;
+        return INSTANCE;
     }
 }

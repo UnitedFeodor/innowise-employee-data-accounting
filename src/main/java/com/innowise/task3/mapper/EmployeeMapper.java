@@ -7,6 +7,9 @@ import com.innowise.task3.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper
 public interface EmployeeMapper {
@@ -16,13 +19,20 @@ public interface EmployeeMapper {
     String ID_TO_ROLE = "idToRole";
     String ID_TO_COMPANY = "idToCompany";
 
+    EmployeeMapper INSTANCE = Mappers.getMapper( EmployeeMapper.class );
+
     @Mapping(source = "employee.company", target = "company",qualifiedByName = COMPANY_TO_ID)
     @Mapping(source = "employee.role", target = "role",qualifiedByName = ROLE_TO_ID)
     EmployeeDTO employeeToEmployeeDTO(Employee employee);
 
+
     @Mapping(source = "employeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
     @Mapping(source = "employeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
     Employee employeeDTOToEmployee(EmployeeDTO employeeDTO);
+
+    @Mapping(source = "employee.company", target = "company",qualifiedByName = COMPANY_TO_ID)
+    @Mapping(source = "employee.role", target = "role",qualifiedByName = ROLE_TO_ID)
+    List<EmployeeDTO> employeeListToEmployeeDTOList(List<Employee> employee);
 
     @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
     @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
