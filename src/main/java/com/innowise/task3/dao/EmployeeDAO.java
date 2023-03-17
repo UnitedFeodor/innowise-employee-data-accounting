@@ -15,6 +15,6 @@ public interface EmployeeDAO {
 
     void deleteEmployee(int id);
 
-    boolean login(String login, String password);
+    boolean signIn(String email, String password);
     boolean register (Employee employee);
 }
