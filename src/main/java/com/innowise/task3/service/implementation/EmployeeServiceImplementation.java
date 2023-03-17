@@ -39,7 +39,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
     @Override
     public void deleteEmployee(int id) {
-
+        employeeDAO.deleteEmployee(id);
     }
 
     @Override
