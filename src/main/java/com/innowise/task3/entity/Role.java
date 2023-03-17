@@ -6,6 +6,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-    Integer id;
+    Integer id = null;
     String name;
 }

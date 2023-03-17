@@ -140,13 +140,18 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
                 employee.setPassword(hashedPassword);
             }
 
+
             List<Object> employeeFields = Arrays.asList(
                     employee.getName(),
                     employee.getSurname(),
                     employee.getPosition(),
                     employee.getBirthDate(),
-                    employee.getRole() != null ? employee.getRole().getId() : null,
-                    employee.getCompany() != null ? employee.getCompany().getId() : null,
+                    employee.getRole() != null && employee.getRole().getId() > 0
+                            ? employee.getRole().getId()
+                            : null,
+                    employee.getCompany() != null && employee.getCompany().getId() > 0
+                            ? employee.getCompany().getId()
+                            : null,
                     employee.getEmail(),
                     employee.getPassword()
             );

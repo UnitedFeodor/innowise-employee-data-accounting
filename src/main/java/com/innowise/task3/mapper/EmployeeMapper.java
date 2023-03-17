@@ -19,7 +19,7 @@ public interface EmployeeMapper {
     String ID_TO_ROLE = "idToRole";
     String ID_TO_COMPANY = "idToCompany";
 
-    EmployeeMapper INSTANCE = Mappers.getMapper( EmployeeMapper.class );
+    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
     @Mapping(source = "employee.company", target = "company",qualifiedByName = COMPANY_TO_ID)
     @Mapping(source = "employee.role", target = "role",qualifiedByName = ROLE_TO_ID)
@@ -34,38 +34,48 @@ public interface EmployeeMapper {
     @Mapping(source = "employee.role", target = "role",qualifiedByName = ROLE_TO_ID)
     List<EmployeeDTO> employeeListToEmployeeDTOList(List<Employee> employee);
 
-    @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
-    @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
-    Employee addEditEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
+    @Mapping(source = "addEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
+    @Mapping(source = "addEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
+    Employee addEmployeeDTOToEmployee(AddEmployeeDTO addEmployeeDTO);
 
-    @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
-    @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
-    Employee editEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
+    @Mapping(source = "editEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
+    @Mapping(source = "editEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
+    Employee editEmployeeDTOToEmployee(EditEmployeeDTO editEmployeeDTO);
 
     Employee loginDTOToEmployee(LoginDTO editEmployeeDTO);
 
     @Named(COMPANY_TO_ID)
-    static int companyToId(Company company) {
-        return company.getId();
+    static Integer companyToId(Company company) {
+        return company != null ? company.getId() : null;
     }
 
     @Named(ROLE_TO_ID)
-    static int roleToId(Role role) {
-        return role.getId();
+    static Integer roleToId(Role role) {
+        return role != null ? role.getId() : null;
     }
 
     @Named(ID_TO_COMPANY)
-    static Company idToCompany(int companyId) {
-        Company company = new Company();
-        company.setId(companyId);
-        return company;
+    static Company idToCompany(Integer companyId) {
+        if (companyId != null) {
+
+            Company company = new Company();
+            company.setId(companyId);
+            return company;
+        } else {
+            return null;
+        }
+
     }
 
     @Named(ID_TO_ROLE)
-    static Role idToRole(int roleId) {
-        Role role = new Role();
-        role.setId(roleId);
-        return role;
+    static Role idToRole(Integer roleId) {
+        if (roleId != null) {
+            Role role = new Role();
+            role.setId(roleId);
+            return role;
+        } else {
+            return null;
+        }
     }
 
 

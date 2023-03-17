@@ -24,6 +24,7 @@ public class GetEmployeesExecutor implements Command {
         List<EmployeeDTO> employeeList = employeeService.getAllEmployees();
         String employeesJsonString = objectMapper.writeValueAsString(employeeList);
 
+        response.setStatus(HttpServletResponse.SC_OK);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

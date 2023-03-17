@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class GetEmployeeWithIdExecutor implements Command {
-    public static final String ID = "id";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
@@ -26,6 +25,7 @@ public class GetEmployeeWithIdExecutor implements Command {
         EmployeeDTO employee = employeeService.getEmployeeWithId(employeeId);
         String employeeJsonString = objectMapper.writeValueAsString(employee);
 
+        response.setStatus(HttpServletResponse.SC_OK);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

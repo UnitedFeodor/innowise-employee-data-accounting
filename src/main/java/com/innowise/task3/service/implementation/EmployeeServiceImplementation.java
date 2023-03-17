@@ -27,13 +27,14 @@ public class EmployeeServiceImplementation implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO editEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
-        return null;
+    public EmployeeDTO editEmployee(EditEmployeeDTO editEmployeeDTO) {
+        Employee employee = employeeDAO.editEmployee(employeeMapper.editEmployeeDTOToEmployee(editEmployeeDTO));
+        return employeeMapper.employeeToEmployeeDTO(employee);
     }
 
     @Override
-    public EmployeeDTO addEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
-        Employee employee = employeeDAO.addEmployee(employeeMapper.addEditEmployeeDTOToEmployee(addEditEmployeeDTO));
+    public EmployeeDTO addEmployee(AddEmployeeDTO addEmployeeDTO) {
+        Employee employee = employeeDAO.addEmployee(employeeMapper.addEmployeeDTOToEmployee(addEmployeeDTO));
         return employeeMapper.employeeToEmployeeDTO(employee);
     }
 
