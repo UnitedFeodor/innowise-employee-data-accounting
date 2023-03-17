@@ -4,6 +4,7 @@ import com.innowise.task3.dao.implementation.EmployeeDAOImplementation;
 import com.innowise.task3.entity.Company;
 import com.innowise.task3.entity.Employee;
 import com.innowise.task3.entity.Role;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -61,11 +62,12 @@ public class EmployeeDAOTest {
     @Test
     void editEmployeeNotAllFields() {
         Employee employee = new Employee();
-        employee.setId(9);
-        employee.setName("aasdas");
-        employee.setPosition("cgsdffsd");
-        employee.setCompany(new Company(1,""));
-        employee.setBirthDate(LocalDate.of(1992,12,7));
+        employee.setId(3);
+//        employee.setName("aasdas");
+//        employee.setPosition("cgsdffsd");
+//        employee.setCompany(new Company(1,""));
+//        employee.setBirthDate(LocalDate.of(1992,12,7));
+        employee.setPassword("password");
         Employee editedEmployee = employeeDAO.editEmployee(employee);
 
         System.out.println(editedEmployee);
@@ -84,6 +86,13 @@ public class EmployeeDAOTest {
     void deleteEmployee(){
         int id = 10;
         employeeDAO.deleteEmployee(id);
+    }
+
+    @Test
+    void signIn(){
+        String email = "jack@yahoo.com";
+        String password = "password";
+        Assertions.assertTrue(employeeDAO.signIn(email,password));
     }
 
 }
