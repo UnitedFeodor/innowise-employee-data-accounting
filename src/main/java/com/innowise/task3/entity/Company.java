@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 public class Company {
     @EqualsAndHashCode.Exclude
-    int id;
+    Integer id;
     String name;
 }

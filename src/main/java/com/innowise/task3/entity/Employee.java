@@ -8,9 +8,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
-
     @EqualsAndHashCode.Exclude
-    int id;
+    Integer id;
     String name;
     String surname;
     String position;
@@ -19,6 +18,4 @@ public class Employee {
     String password;
     Company company;
     Role role;
-
-
 }

@@ -1,6 +1,5 @@
 package com.innowise.task3.dao;
 
-import com.innowise.task3.dto.*;
 import com.innowise.task3.entity.Employee;
 
 import java.util.List;
@@ -10,9 +9,9 @@ public interface EmployeeDAO {
 
     Employee getEmployeeWithId(int id);
 
-    void editEmployee(Employee employee);
+    Employee editEmployee(Employee employee);
 
-    void addEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
 
     void deleteEmployee(int id);
 
