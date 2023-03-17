@@ -58,7 +58,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
             List<Employee> employees = new ArrayList<>();
             while (resultSet.next()) {
-                employees.add(resultSetToEmployee(resultSet));
+                employees.add(employeeResultSetToEmployee(resultSet));
             }
             return employees;
 
@@ -87,33 +87,13 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
                 }
 
                 resultSet.next();
-                Employee employee = resultSetToEmployee(resultSet);
+                Employee employee = employeeResultSetToEmployee(resultSet);
                 return employee;
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Employee resultSetToEmployee(ResultSet resultSet) throws SQLException {
-        Employee employee = new Employee();
-
-        employee.setId(resultSet.getInt(E_ID));
-
-        employee.setName(resultSet.getString(E_NAME));
-        employee.setSurname(resultSet.getString(E_SURNAME));
-        employee.setBirthDate(resultSet.getDate(E_BIRTH_DATE).toLocalDate());
-
-        employee.setPosition(resultSet.getString(E_POSITION));
-
-        employee.setEmail(resultSet.getString(E_EMAIL));
-
-        Role role = new Role(resultSet.getInt(E_ROLE_ID), resultSet.getString(E_ROLE_NAME));
-        employee.setRole(role);
-        Company company = new Company(resultSet.getInt(E_COMPANY_ID), resultSet.getString(E_COMPANY_NAME));
-        employee.setCompany(company);
-        return employee;
     }
 
     @Override
@@ -253,21 +233,26 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     }
 
     @Override
-    public boolean signIn(String email, String password) {
-        final String Q_GET_USER_BY_LOGIN = "SELECT e_email,e_password FROM employee WHERE e_email = ?";
+    public Employee login(String email, String password) {
+        final String Q_GET_USER_BY_EMAIL = "SELECT * FROM employee WHERE e_email = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-             PreparedStatement getUserStatement = connection.prepareStatement(Q_GET_USER_BY_LOGIN)) {
+             PreparedStatement getUserStatement = connection.prepareStatement(Q_GET_USER_BY_EMAIL)) {
 
             getUserStatement.setString(1, email);
 
             try(ResultSet rs = getUserStatement.executeQuery()) {
                 if (!rs.isBeforeFirst()) {
-                    return false; // no such login in db
+                    throw new RuntimeException("no such email in db"); // no such login in db
                 }
                 rs.next();
                 String hashedPassword = rs.getString(E_PASSWORD);
-                return BCrypt.checkpw(password,hashedPassword);
+                if (!BCrypt.checkpw(password,hashedPassword)) {
+                    return null;
+                }
+                Employee employee = employeeResultSetToEmployee(rs);
+                return employee;
+
 
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(e);
@@ -282,5 +267,25 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     @Override
     public boolean register(Employee employee) {
         return false;
+    }
+
+    private Employee employeeResultSetToEmployee(ResultSet resultSet) throws SQLException {
+        Employee employee = new Employee();
+
+        employee.setId(resultSet.getInt(E_ID));
+
+        employee.setName(resultSet.getString(E_NAME));
+        employee.setSurname(resultSet.getString(E_SURNAME));
+        employee.setBirthDate(resultSet.getDate(E_BIRTH_DATE).toLocalDate());
+
+        employee.setPosition(resultSet.getString(E_POSITION));
+
+        employee.setEmail(resultSet.getString(E_EMAIL));
+
+        Role role = new Role(resultSet.getInt(E_ROLE_ID), null);
+        employee.setRole(role);
+        Company company = new Company(resultSet.getInt(E_COMPANY_ID), null);
+        employee.setCompany(company);
+        return employee;
     }
 }

@@ -44,8 +44,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
     }
 
     @Override
-    public boolean login(LoginDTO loginDTO) {
-        return false;
+    public EmployeeDTO login(LoginDTO loginDTO) {
+        Employee employee = employeeDAO.login(loginDTO.getEmail(),loginDTO.getPassword());
+
+        return employee == null ? null : employeeMapper.employeeToEmployeeDTO(employee);
     }
 
     @Override

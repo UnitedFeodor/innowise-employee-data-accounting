@@ -1,4 +1,3 @@
-import com.innowise.task3.dao.DAOProvider;
 import com.innowise.task3.dao.EmployeeDAO;
 import com.innowise.task3.dao.implementation.EmployeeDAOImplementation;
 import com.innowise.task3.entity.Company;
@@ -92,7 +91,7 @@ public class EmployeeDAOTest {
     void signIn(){
         String email = "jack@yahoo.com";
         String password = "password";
-        Assertions.assertTrue(employeeDAO.signIn(email,password));
+        Assertions.assertTrue(employeeDAO.login(email,password) != null);
     }
 
 }

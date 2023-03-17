@@ -16,7 +16,7 @@ public interface EmployeeService {
 
     void deleteEmployee(int id);
 
-    boolean login(LoginDTO loginDTO);
+    EmployeeDTO login(LoginDTO loginDTO);
     boolean register (RegisterDTO registerDTO);
 
 }

@@ -1,14 +1,15 @@
 package com.innowise.task3.controller;
 
 public enum CommandName {
-    GET_EMPLOYEES("/employees", "GET"),
-    GET_EMPLOYEE_WITH_ID("/employee/","GET"),
-    ADD_EMPLOYEE("/employees", "POST"),
-    DELETE_EMPLOYEE_WITH_ID("/employee/","DELETE"),
-    EDIT_EMPLOYEE_WITH_ID("/employee/","PUT"),
-    INVALID_REQUEST("/error","GET"),
-    LOGIN("/login","GET");
+    GET_EMPLOYEES(URI.URI_EMPLOYEES, HttpMethod.GET),
+    GET_EMPLOYEE_WITH_ID(URI.URI_EMPLOYEE, HttpMethod.GET),
+    ADD_EMPLOYEE(URI.URI_EMPLOYEES, HttpMethod.POST),
+    DELETE_EMPLOYEE_WITH_ID(URI.URI_EMPLOYEE, HttpMethod.DELETE),
+    EDIT_EMPLOYEE_WITH_ID(URI.URI_EMPLOYEE, HttpMethod.PUT),
+    INVALID_REQUEST(URI.URI_ERROR, HttpMethod.GET),
+    LOGIN(URI.URI_LOGIN, HttpMethod.GET);
     // TODO change or something REGISTER;
+
 
     private String uri;
     private String httpMethod;
@@ -26,4 +27,21 @@ public enum CommandName {
         this.httpMethod = httpMethod;
 
     }
+
+    public static class URI {
+        public static final String URI_ERROR = "/error";
+        public static final String URI_EMPLOYEES = "/employees";
+        public static final String URI_EMPLOYEE = "/employee/";
+        public static final String URI_LOGIN = "/login";
+
+    }
+    public static class HttpMethod {
+
+        public static final String GET = "GET";
+        public static final String POST = "POST";
+        public static final String DELETE = "DELETE";
+        public static final String PUT = "PUT";
+
+    }
+
 }
