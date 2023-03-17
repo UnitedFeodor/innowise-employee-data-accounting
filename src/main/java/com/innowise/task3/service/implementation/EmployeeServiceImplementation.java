@@ -10,26 +10,31 @@ import com.innowise.task3.service.EmployeeService;
 import java.util.List;
 
 public class EmployeeServiceImplementation implements EmployeeService {
+    // TODO add exceptions and validation
 
     EmployeeDAO employeeDAO = DAOProvider.getInstance().getEmployeeDAO();
+
+    EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
+
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        return EmployeeMapper.INSTANCE.employeeListToEmployeeDTOList(employeeDAO.getAllEmployees());
+        return employeeMapper.employeeListToEmployeeDTOList(employeeDAO.getAllEmployees());
     }
 
     @Override
     public EmployeeDTO getEmployeeWithId(int id) {
-        return EmployeeMapper.INSTANCE.employeeToEmployeeDTO(employeeDAO.getEmployeeWithId(id));
+        return employeeMapper.employeeToEmployeeDTO(employeeDAO.getEmployeeWithId(id));
     }
 
     @Override
-    public void editEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
-
+    public EmployeeDTO editEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
+        return null;
     }
 
     @Override
-    public void addEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
-
+    public EmployeeDTO addEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
+        Employee employee = employeeDAO.addEmployee(employeeMapper.addEditEmployeeDTOToEmployee(addEditEmployeeDTO));
+        return employeeMapper.employeeToEmployeeDTO(employee);
     }
 
     @Override

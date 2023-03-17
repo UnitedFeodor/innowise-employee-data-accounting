@@ -21,7 +21,9 @@ public class GetEmployeeWithIdExecutor implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int employeeId = Integer.parseInt(request.getParameter(ID));
+        String uri = request.getServletPath();
+        String[] segments = uri.split("/");
+        int employeeId = Integer.parseInt(segments[segments.length-1]);
         EmployeeDTO employee = employeeService.getEmployeeWithId(employeeId);
         String employeeJsonString = objectMapper.writeValueAsString(employee);
 
