@@ -3,6 +3,7 @@ package com.innowise.task3.controller.implementation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innowise.task3.controller.Command;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
+import com.innowise.task3.controller.utils.Utils;
 import com.innowise.task3.dto.EmployeeDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceProvider;
@@ -21,9 +22,7 @@ public class GetEmployeeWithIdExecutor implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String uri = request.getServletPath();
-        String[] segments = uri.split("/");
-        int employeeId = Integer.parseInt(segments[segments.length-1]);
+        int employeeId = Utils.getIdFromLastQuerySegment(request.getServletPath());
         EmployeeDTO employee = employeeService.getEmployeeWithId(employeeId);
         String employeeJsonString = objectMapper.writeValueAsString(employee);
 

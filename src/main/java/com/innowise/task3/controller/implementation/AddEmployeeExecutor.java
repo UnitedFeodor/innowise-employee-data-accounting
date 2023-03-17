@@ -24,13 +24,6 @@ public class AddEmployeeExecutor implements Command {
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getMethod());
-//        System.out.println(request.getHeaderNames());
-//        ServletInputStream servletInputStream = request.getInputStream();
-//        while (servletInputStream.isReady()){
-//            System.out.print(servletInputStream.read());
-//        }
-
         AddEditEmployeeDTO addEditEmployeeDTO = objectMapper.readValue(request.getReader(), AddEditEmployeeDTO.class);
         EmployeeDTO employeeDTO = employeeService.addEmployee(addEditEmployeeDTO);
 
