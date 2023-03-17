@@ -240,8 +240,30 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     }
 
     @Override
-    public boolean login(String login, String password) {
-        return false;
+    public boolean signIn(String email, String password) {
+        final String Q_GET_USER_BY_LOGIN = "SELECT e_email,e_password FROM employee WHERE e_email = ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+             PreparedStatement getUserStatement = connection.prepareStatement(Q_GET_USER_BY_LOGIN)) {
+
+            getUserStatement.setString(1, email);
+
+            try(ResultSet rs = getUserStatement.executeQuery()) {
+                if (!rs.isBeforeFirst()) {
+                    return false; // no such login in db
+                }
+                rs.next();
+                String hashedPassword = rs.getString(E_PASSWORD);
+                return BCrypt.checkpw(password,hashedPassword);
+
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(e);
+            }
+
+
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
