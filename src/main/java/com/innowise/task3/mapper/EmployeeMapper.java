@@ -36,7 +36,7 @@ public interface EmployeeMapper {
 
     @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
     @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
-    Employee addEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
+    Employee addEditEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
 
     @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
     @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
