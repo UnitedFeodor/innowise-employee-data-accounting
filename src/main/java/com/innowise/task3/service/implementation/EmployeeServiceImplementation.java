@@ -19,7 +19,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
     @Override
     public EmployeeDTO getEmployeeWithId(int id) {
-        return null;
+        return EmployeeMapper.INSTANCE.employeeToEmployeeDTO(employeeDAO.getEmployeeWithId(id));
     }
 
     @Override
