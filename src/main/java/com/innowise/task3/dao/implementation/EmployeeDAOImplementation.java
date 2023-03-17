@@ -220,6 +220,22 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
     @Override
     public void deleteEmployee(int id) {
+        final String DELETE_EMPLOYEE_WITH_ID = "DELETE FROM employee WHERE e_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+             PreparedStatement deleteStatement = connection.prepareStatement(DELETE_EMPLOYEE_WITH_ID)){
+
+            deleteStatement.setInt(1,id);
+
+            int affectedRows = deleteStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting user failed, no rows affected.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
