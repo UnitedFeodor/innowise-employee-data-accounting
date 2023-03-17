@@ -10,9 +10,9 @@ public interface EmployeeService {
 
     EmployeeDTO getEmployeeWithId(int id);
 
-    void editEmployee(EditEmployeeDTO editEmployeeDTO);
+    void editEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
 
-    void addEmployee(AddEmployeeDTO addEmployeeDTO);
+    void addEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
 
     void deleteEmployee(int id);
 

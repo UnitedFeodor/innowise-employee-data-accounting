@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class AddEmployeeDTO {
+public class AddEditEmployeeDTO {
     String name;
     String surname;
     String position;

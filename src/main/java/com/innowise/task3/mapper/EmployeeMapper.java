@@ -8,8 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.List;
-
 @Mapper
 public interface EmployeeMapper {
 
@@ -26,13 +24,13 @@ public interface EmployeeMapper {
     @Mapping(source = "employeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
     Employee employeeDTOToEmployee(EmployeeDTO employeeDTO);
 
-    @Mapping(source = "addEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
-    @Mapping(source = "addEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
-    Employee addEmployeeDTOToEmployee(AddEmployeeDTO addEmployeeDTO);
+    @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
+    @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
+    Employee addEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
 
-    @Mapping(source = "editEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
-    @Mapping(source = "editEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
-    Employee editEmployeeDTOToEmployee(EditEmployeeDTO editEmployeeDTO);
+    @Mapping(source = "addEditEmployeeDTO.company", target = "company",qualifiedByName = ID_TO_COMPANY)
+    @Mapping(source = "addEditEmployeeDTO.role", target = "role",qualifiedByName = ID_TO_ROLE)
+    Employee editEmployeeDTOToEmployee(AddEditEmployeeDTO addEditEmployeeDTO);
 
     Employee loginDTOToEmployee(LoginDTO editEmployeeDTO);
 

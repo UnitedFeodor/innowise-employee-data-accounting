@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Employee {
 
+    @EqualsAndHashCode.Exclude
     int id;
     String name;
     String surname;

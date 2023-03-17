@@ -21,12 +21,12 @@ public class EmployeeServiceImplementation implements EmployeeService {
     }
 
     @Override
-    public void editEmployee(EditEmployeeDTO editEmployeeDTO) {
+    public void editEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
 
     }
 
     @Override
-    public void addEmployee(AddEmployeeDTO addEmployeeDTO) {
+    public void addEmployee(AddEditEmployeeDTO addEditEmployeeDTO) {
 
     }
 
