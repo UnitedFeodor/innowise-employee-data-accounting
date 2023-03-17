@@ -4,7 +4,6 @@ import com.innowise.task3.controller.implementation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class CommandProvider {
 
@@ -20,15 +19,14 @@ public class CommandProvider {
     }
 
 
-    public Command getCommand(String name) {
-        Command command;
-        try {
-            CommandName commandName = CommandName.valueOf(name.toUpperCase());
-            command = commands.get(commandName);
-            return command;
-        } catch (IllegalArgumentException e) { // no such command
-            command = commands.get(CommandName.INVALID_REQUEST);
-            return command;
+    public Command getCommand(String uri, String httpMethod) {
+        Command command = commands.get(CommandName.INVALID_REQUEST);
+        for(CommandName commandName : CommandName.values()) {
+            if(uri.contains(commandName.getUri()) && httpMethod.equals(commandName.getHttpMethod())) {
+                command = commands.get(commandName);
+            }
         }
+        return command;
+
     }
 }

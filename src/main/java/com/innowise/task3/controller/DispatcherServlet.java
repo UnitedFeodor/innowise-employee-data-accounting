@@ -12,12 +12,32 @@ public class DispatcherServlet extends HttpServlet {
     private final CommandProvider provider = new CommandProvider();
 
     private static final String REQ_PARAM_COMMAND = "command";
+
+
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String commandName = request.getParameter(REQ_PARAM_COMMAND);
-        Command command = provider.getCommand(commandName);
-        command.execute(request, response);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        parseAndExecuteCommand(req,resp);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        parseAndExecuteCommand(req,resp);
+    }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        parseAndExecuteCommand(req,resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        parseAndExecuteCommand(req,resp);
+    }
+    private void parseAndExecuteCommand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String commandName = request.getServletPath();
+        String httpMethod = request.getMethod();
+
+        Command command = provider.getCommand(commandName, httpMethod);
+        command.execute(request, response);
+    }
 }
