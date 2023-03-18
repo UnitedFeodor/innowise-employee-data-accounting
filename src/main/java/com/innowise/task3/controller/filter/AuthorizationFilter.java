@@ -15,6 +15,7 @@ import java.io.IOException;
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 
+    private static final String REQUEST_NOT_AUTHORIZED = "request not authorized";
     private final CommandProvider provider = new CommandProvider();
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -36,7 +37,7 @@ public class AuthorizationFilter implements Filter {
             request.getRequestDispatcher(httpServletRequest.getServletPath()).forward(request, response);
         } else if (session == null || session.getAttribute(LoginExecutor.ID_TOKEN) == null) {
             //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE,"unable to authorize");
+            request.setAttribute(LoginExecutor.ERROR_MESSAGE, REQUEST_NOT_AUTHORIZED);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         } else {
             chain.doFilter(request, response);

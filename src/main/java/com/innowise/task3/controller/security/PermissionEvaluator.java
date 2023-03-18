@@ -17,9 +17,7 @@ public class PermissionEvaluator {
     private final int ADMIN_ROLE_ID = 2;
 
     private final Map<Integer,Integer> roleIdAccessLevelMap = new HashMap<>();
-
     private final Map<CommandName, Integer> commandAccessLevelMap = new HashMap<>();
-
 
     public PermissionEvaluator() {
         commandAccessLevelMap.put(CommandName.GET_EMPLOYEES,USER_ACCESS);

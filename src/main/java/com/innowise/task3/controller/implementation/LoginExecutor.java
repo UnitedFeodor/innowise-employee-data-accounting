@@ -24,6 +24,7 @@ public class LoginExecutor implements Command {
     public static final String ID_TOKEN = "idToken";
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String ERROR_MESSAGE = "errorMessage";
+    private static final String UNABLE_TO_LOGIN = "unable to login";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
@@ -45,7 +46,7 @@ public class LoginExecutor implements Command {
             out.print(employeeJsonString);
             out.flush();
         } else {
-            request.setAttribute(ERROR_MESSAGE,"unable to login");
+            request.setAttribute(ERROR_MESSAGE, UNABLE_TO_LOGIN);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
             //response.sendRedirect(String.valueOf(CommandName.INVALID_REQUEST));
 

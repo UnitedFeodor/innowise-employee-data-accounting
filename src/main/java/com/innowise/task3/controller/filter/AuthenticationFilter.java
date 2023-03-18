@@ -15,6 +15,7 @@ import java.io.IOException;
 @WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
+    private static final String REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL = "request not permitted for this access level";
     private final CommandProvider provider = new CommandProvider();
     private final PermissionEvaluator permissionEvaluator = new PermissionEvaluator();
 
@@ -36,7 +37,7 @@ public class AuthenticationFilter implements Filter {
         if (commandName != CommandName.LOGIN
                 && !permissionEvaluator.isAccessLevelEnoughForCommand(roleId,commandName)) {
             //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE,"unable to authenticate");
+            request.setAttribute(LoginExecutor.ERROR_MESSAGE, REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         } else {
             chain.doFilter(request, response);
