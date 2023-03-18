@@ -1,47 +1,45 @@
 package com.innowise.task3.controller.filter;
 
 import com.innowise.task3.controller.CommandName;
+import com.innowise.task3.controller.CommandProvider;
+import com.innowise.task3.controller.implementation.LoginExecutor;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+@WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
+
+    private final CommandProvider provider = new CommandProvider();
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
     }
 
+    // TODO register filters
+    // TODO add error message body
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
+        String uri = httpServletRequest.getServletPath();
+        String httpMethod = httpServletRequest.getMethod();
+        CommandName commandName = provider.getCommandName(uri, httpMethod);
 
-        HttpSession session = ((HttpServletRequest) request).getSession(false);
-
-        String commandNameStr = request.getParameter(JSPConstants.COMMAND);
-        if (commandNameStr == null) {
-            session.setAttribute(JSPConstants.ERROR_MESSAGE,"no command passed in request");
-            chain.doFilter(filteredRequest,response);
-
+        HttpSession session = httpServletRequest.getSession(false);
+        if (commandName == CommandName.LOGIN) {
+            request.getRequestDispatcher(httpServletRequest.getServletPath()).forward(request, response);
+        } else if (session == null || session.getAttribute(LoginExecutor.ID_TOKEN) == null) {
+            //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);
+            request.setAttribute(LoginExecutor.ERROR_MESSAGE,"unable to authorize");
+            request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         } else {
-            try {
-                CommandName commandName = CommandName.valueOf(commandNameStr.toUpperCase());
-                String userRole = (String) session.getAttribute(UserConstants.USER_ROLE);
-                if(Security.canExecuteThisRequest(userRole, commandName)) {
-                    chain.doFilter(request,response);
-
-                } else {
-                    session.setAttribute(JSPConstants.ERROR_MESSAGE,"cannot do this request for this role");
-                    chain.doFilter(filteredRequest,response);
-                }
-            } catch (IllegalArgumentException e) {
-                session.setAttribute(JSPConstants.ERROR_MESSAGE,"invalid command passed in request");
-                chain.doFilter(filteredRequest,response);
-            }
-
-
+            chain.doFilter(request, response);
         }
     }
 

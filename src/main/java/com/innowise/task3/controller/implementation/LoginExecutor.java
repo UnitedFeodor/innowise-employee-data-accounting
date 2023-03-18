@@ -2,6 +2,7 @@ package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.utils.Utils;
 import com.innowise.task3.dto.EditEmployeeDTO;
@@ -18,8 +19,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class LoginExecutor implements Command {
+
+    // TODO put constants elsewhere i guess
     public static final String ID_TOKEN = "idToken";
     public static final String ACCESS_TOKEN = "accessToken";
+    public static final String ERROR_MESSAGE = "errorMessage";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
@@ -41,6 +45,9 @@ public class LoginExecutor implements Command {
             out.print(employeeJsonString);
             out.flush();
         } else {
+            request.setAttribute(ERROR_MESSAGE,"unable to login");
+            request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
+            //response.sendRedirect(String.valueOf(CommandName.INVALID_REQUEST));
 
         }
     }

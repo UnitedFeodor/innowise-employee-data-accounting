@@ -16,17 +16,22 @@ public class CommandProvider {
         commands.put(CommandName.GET_EMPLOYEES, new GetEmployeesExecutor());
         commands.put(CommandName.GET_EMPLOYEE_WITH_ID, new GetEmployeeWithIdExecutor());
         commands.put(CommandName.INVALID_REQUEST, new InvalidRequestExecutor());
+        commands.put(CommandName.LOGIN, new LoginExecutor());
+        commands.put(CommandName.LOGOUT, new LogoutExecutor());
     }
 
 
     public Command getCommand(String uri, String httpMethod) {
-        Command command = commands.get(CommandName.INVALID_REQUEST);
-        for(CommandName commandName : CommandName.values()) {
-            if(uri.contains(commandName.getUri()) && httpMethod.equals(commandName.getHttpMethod())) {
-                command = commands.get(commandName);
+        return commands.get(getCommandName(uri, httpMethod));
+
+    }
+
+    public CommandName getCommandName(String uri, String httpMethod) {
+        for(CommandName currName : CommandName.values()) {
+            if(uri.contains(currName.getUri()) && httpMethod.equals(currName.getHttpMethod())) {
+                return currName;
             }
         }
-        return command;
-
+        return CommandName.INVALID_REQUEST;
     }
 }
