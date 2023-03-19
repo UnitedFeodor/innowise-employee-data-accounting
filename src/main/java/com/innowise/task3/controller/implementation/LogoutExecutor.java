@@ -16,10 +16,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class LogoutExecutor implements Command {
-    public static final String ID_TOKEN = "idToken";
-    public static final String ACCESS_TOKEN = "accessToken";
-    private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
-    private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

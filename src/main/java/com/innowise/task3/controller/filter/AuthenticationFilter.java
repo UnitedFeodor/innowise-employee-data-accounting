@@ -7,7 +7,6 @@ import com.innowise.task3.controller.security.PermissionEvaluator;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class AuthenticationFilter implements Filter {
         CommandName commandName = provider.getCommandName(uri, httpMethod);
 
         HttpSession session = httpServletRequest.getSession(false);
-        int roleId = (int) session.getAttribute(LoginExecutor.ACCESS_TOKEN);
+        int roleId = (int) session.getAttribute(LoginExecutor.ROLE_TOKEN);
         if (commandName != CommandName.LOGIN
                 && !permissionEvaluator.isAccessLevelEnoughForCommand(roleId,commandName)) {
             //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);

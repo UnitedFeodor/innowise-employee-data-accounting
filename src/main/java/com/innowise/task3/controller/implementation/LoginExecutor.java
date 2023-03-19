@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innowise.task3.controller.Command;
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
-import com.innowise.task3.controller.utils.Utils;
-import com.innowise.task3.dto.EditEmployeeDTO;
 import com.innowise.task3.dto.EmployeeDTO;
 import com.innowise.task3.dto.LoginDTO;
 import com.innowise.task3.service.EmployeeService;
@@ -22,11 +20,12 @@ public class LoginExecutor implements Command {
 
     // TODO put constants elsewhere i guess
     public static final String ID_TOKEN = "idToken";
-    public static final String ACCESS_TOKEN = "accessToken";
+    public static final String ROLE_TOKEN = "accessToken";
     public static final String ERROR_MESSAGE = "errorMessage";
     private static final String UNABLE_TO_LOGIN = "unable to login";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LoginDTO loginDTO = objectMapper.readValue(request.getReader(), LoginDTO.class);
@@ -35,7 +34,7 @@ public class LoginExecutor implements Command {
         if (employee != null) {
             HttpSession session = request.getSession(true);
             session.setAttribute(ID_TOKEN,employee.getId());
-            session.setAttribute(ACCESS_TOKEN,employee.getRole());
+            session.setAttribute(ROLE_TOKEN,employee.getRole());
 
             String employeeJsonString = objectMapper.writeValueAsString(employee);
 
