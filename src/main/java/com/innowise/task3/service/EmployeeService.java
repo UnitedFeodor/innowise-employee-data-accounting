@@ -6,17 +6,16 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    List<EmployeeDTO> getAllEmployees();
+    List<EmployeeDTO> getAllEmployees() throws ServiceException;
 
-    EmployeeDTO getEmployeeWithId(int id);
+    EmployeeDTO getEmployeeWithId(int id) throws ServiceException;
 
-    EmployeeDTO editEmployee(EditEmployeeDTO editEmployeeDTO);
+    EmployeeDTO editEmployee(EditEmployeeDTO editEmployeeDTO) throws ServiceException;
 
-    EmployeeDTO addEmployee(AddEmployeeDTO addEmployeeDTO);
+    EmployeeDTO addEmployee(AddEmployeeDTO addEmployeeDTO) throws ServiceException;
 
-    void deleteEmployee(int id);
+    void deleteEmployee(int id) throws ServiceException;
 
-    EmployeeDTO login(LoginDTO loginDTO);
-    boolean register (RegisterDTO registerDTO);
+    EmployeeDTO login(LoginDTO loginDTO) throws ServiceException;
 
 }

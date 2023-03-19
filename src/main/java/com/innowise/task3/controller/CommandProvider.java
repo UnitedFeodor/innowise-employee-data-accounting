@@ -23,7 +23,6 @@ public class CommandProvider {
 
     public Command getCommand(String uri, String httpMethod) {
         return commands.get(getCommandName(uri, httpMethod));
-
     }
 
     public CommandName getCommandName(String uri, String httpMethod) {

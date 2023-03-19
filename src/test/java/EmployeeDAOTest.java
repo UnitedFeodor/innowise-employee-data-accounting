@@ -1,3 +1,4 @@
+import com.innowise.task3.dao.DAOException;
 import com.innowise.task3.dao.EmployeeDAO;
 import com.innowise.task3.dao.implementation.EmployeeDAOImplementation;
 import com.innowise.task3.entity.Company;
@@ -13,19 +14,19 @@ public class EmployeeDAOTest {
     EmployeeDAO employeeDAO = new EmployeeDAOImplementation();
 
     @Test
-    void getAllEmployees() {
+    void getAllEmployees() throws DAOException {
         List<Employee> employees = employeeDAO.getAllEmployees();
         System.out.println(employees);
     }
 
     @Test
-    void getEmployeeWithId() {
+    void getEmployeeWithId() throws DAOException {
         Employee employee = employeeDAO.getEmployeeWithId(1);
         System.out.println(employee);
     }
 
     @Test
-    void addEmployee() {
+    void addEmployee() throws DAOException {
         Employee employee = new Employee();
         employee.setName("a");
         employee.setSurname("b");
@@ -42,7 +43,7 @@ public class EmployeeDAOTest {
     }
 
     @Test
-    void editEmployeeAllFields() {
+    void editEmployeeAllFields() throws DAOException {
         Employee employee = new Employee();
         employee.setId(7);
         employee.setName("aasdas");
@@ -59,7 +60,7 @@ public class EmployeeDAOTest {
     }
 
     @Test
-    void editEmployeeNotAllFields() {
+    void editEmployeeNotAllFields() throws DAOException {
         Employee employee = new Employee();
         employee.setId(3);
 //        employee.setName("aasdas");
@@ -73,7 +74,7 @@ public class EmployeeDAOTest {
     }
 
     @Test
-    void editEmployeeNoFields() {
+    void editEmployeeNoFields() throws DAOException {
         Employee employee = new Employee();
         employee.setId(9);
         Employee editedEmployee = employeeDAO.editEmployee(employee);
@@ -82,13 +83,13 @@ public class EmployeeDAOTest {
     }
 
     @Test
-    void deleteEmployee(){
+    void deleteEmployee() throws DAOException {
         int id = 10;
         employeeDAO.deleteEmployee(id);
     }
 
     @Test
-    void signIn(){
+    void signIn() throws DAOException {
         String email = "jack@yahoo.com";
         String password = "password";
         Assertions.assertTrue(employeeDAO.login(email,password) != null);

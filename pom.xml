@@ -45,7 +45,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- TODO might need 8.0.15 for old mysql workbench compatibility -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

@@ -9,8 +9,6 @@ public enum CommandName {
     INVALID_REQUEST(URI.ERROR, HttpMethod.GET),
     LOGIN(URI.SESSION, HttpMethod.POST),
     LOGOUT(URI.SESSION, HttpMethod.DELETE);
-    // TODO change or something REGISTER;
-
 
     private String uri;
     private String httpMethod;

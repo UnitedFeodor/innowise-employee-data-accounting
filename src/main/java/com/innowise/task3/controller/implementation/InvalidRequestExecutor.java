@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.innowise.task3.controller.Command;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
+import com.innowise.task3.controller.utils.ControllerUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,14 +21,11 @@ public class InvalidRequestExecutor implements Command {
 
         String errorMessage = (String) request.getAttribute(LoginExecutor.ERROR_MESSAGE);
 
-        ObjectNode errorJSON = objectMapper.createObjectNode();
-        errorJSON.put(ERROR,errorMessage);
+        ObjectNode errorJsonNode = objectMapper.createObjectNode();
+        errorJsonNode.put(ERROR,errorMessage);
+        String errorJsonString = objectMapper.writeValueAsString(errorJsonNode);
 
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        out.print(objectMapper.writeValueAsString(errorJSON));
-        out.flush();
+        ControllerUtils.writeJSONResponse(response,errorJsonString, HttpServletResponse.SC_BAD_REQUEST);
+
     }
 }

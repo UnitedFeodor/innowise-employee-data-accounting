@@ -1,5 +1,6 @@
 package com.innowise.task3.dao.implementation;
 
+import com.innowise.task3.dao.DAOException;
 import com.innowise.task3.dao.EmployeeDAO;
 import com.innowise.task3.entity.Company;
 import com.innowise.task3.entity.Employee;
@@ -15,13 +16,6 @@ import java.util.List;
 public class EmployeeDAOImplementation implements EmployeeDAO {
 
     public static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static {
-        try {
-            Class.forName(DB_DRIVER);
-        } catch (ClassNotFoundException e) { // TODO move to listener
-            throw new RuntimeException(e);
-        }
-    }
     public static final String DB_URL = "jdbc:mysql://127.0.0.1/employee-data-accounting?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     public static final String DB_USER = "root";
     public static final String DB_PASSWORD = "BebraBebra";
@@ -37,23 +31,21 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public static final String E_COMPANY_NAME = "e_company_name";
 
     public static final String E_PASSWORD = "e_password";
-    // TODO add custom exceptions
     // TODO add commits and rollbacks
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public List<Employee> getAllEmployees() throws DAOException {
         final String SELECT_ALL_FROM_EMPLOYEE =
                 "SELECT employee.*,role.r_name AS e_role_name ,company.c_name AS e_company_name FROM employee " +
                         "JOIN company ON e_company_id = c_id  " +
                         "JOIN role ON e_role_id = r_id; ";
-//                "SELECT e_id,e_name,e_surname,e_position,e_birth_date,e_email,e_password,company.c_name,role.r_name " +
-//                "FROM employee INNER JOIN company ON e_company_id = c_id JOIN role ON e_role_id = r_id; ";
+
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
              PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_FROM_EMPLOYEE);
              ResultSet resultSet = selectStatement.executeQuery()) {
 
             if (!resultSet.isBeforeFirst()) {
-                throw new SQLException();
+                throw new DAOException();
             }
 
             List<Employee> employees = new ArrayList<>();
@@ -63,12 +55,12 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             return employees;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
     }
 
     @Override
-    public Employee getEmployeeWithId(int id) {
+    public Employee getEmployeeWithId(int id) throws DAOException {
         final String SELECT_EMPLOYEE_WITH_ID =
                 "SELECT employee.*,role.r_name AS e_role_name ,company.c_name AS e_company_name FROM employee " +
                         "JOIN company ON e_company_id = c_id  " +
@@ -83,7 +75,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             try (ResultSet resultSet = selectStatement.executeQuery()) {
 
                 if (!resultSet.isBeforeFirst()) {
-                    throw new SQLException();
+                    throw new DAOException();
                 }
 
                 resultSet.next();
@@ -92,12 +84,12 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
     }
 
     @Override
-    public Employee editEmployee(Employee employee) {
+    public Employee editEmployee(Employee employee) throws DAOException {
 
         final String UPDATE_EMPLOYEE = "UPDATE employee " +
                 "SET e_name = CASE WHEN ? IS NULL THEN e_name ELSE ? END," +
@@ -159,18 +151,18 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
             int affectedRows = updateStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Updating user failed, no rows affected.");
+                throw new DAOException("Updating user failed, no rows affected.");
             }
 
 
             return employee;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
     }
 
     @Override
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) throws DAOException  {
         final String INSERT_EMPLOYEE =
                 "INSERT INTO employee (e_name,e_surname,e_position,e_birth_date,e_role_id,e_company_id,e_email,e_password) " +
                         "VALUES (?,?,?,?,?,?,?,?)";
@@ -193,26 +185,26 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
             int affectedRows = insertStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
+                throw new DAOException("Creating user failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     employee.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new DAOException("Creating user failed, no ID obtained.");
                 }
             }
 
             return employee;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
 
     }
 
     @Override
-    public void deleteEmployee(int id) {
+    public void deleteEmployee(int id) throws DAOException  {
         final String DELETE_EMPLOYEE_WITH_ID = "DELETE FROM employee WHERE e_id = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
@@ -222,18 +214,18 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
             int affectedRows = deleteStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Deleting user failed, no rows affected.");
+                throw new DAOException("Deleting user failed, no rows affected.");
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
 
 
     }
 
     @Override
-    public Employee login(String email, String password) {
+    public Employee login(String email, String password) throws DAOException {
         final String Q_GET_USER_BY_EMAIL = "SELECT * FROM employee WHERE e_email = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
@@ -243,7 +235,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 
             try(ResultSet rs = getUserStatement.executeQuery()) {
                 if (!rs.isBeforeFirst()) {
-                    throw new RuntimeException("no such email in db"); // no such login in db
+                    throw new DAOException("no such email in db"); // no such login in db
                 }
                 rs.next();
                 String hashedPassword = rs.getString(E_PASSWORD);
@@ -254,19 +246,12 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
                 return employee;
 
 
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(e);
             }
 
 
         } catch (SQLException | IllegalArgumentException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         }
-    }
-
-    @Override
-    public boolean register(Employee employee) {
-        return false;
     }
 
     private Employee employeeResultSetToEmployee(ResultSet resultSet) throws SQLException {
