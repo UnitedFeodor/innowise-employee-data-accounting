@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class GetEmployeeWithIdExecutor implements Command {
     private static final String UNABLE_TO_GET_EMPLOYEE_DATA = "Unable to get employee data";
@@ -32,7 +31,7 @@ public class GetEmployeeWithIdExecutor implements Command {
             ControllerUtils.writeJSONResponse(response,employeeJsonString, HttpServletResponse.SC_OK);
 
         } catch (ServiceException e) {
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE, UNABLE_TO_GET_EMPLOYEE_DATA);
+            request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_GET_EMPLOYEE_DATA);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         }
 

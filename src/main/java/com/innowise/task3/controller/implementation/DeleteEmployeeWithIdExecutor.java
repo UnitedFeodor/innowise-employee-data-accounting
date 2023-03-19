@@ -28,7 +28,7 @@ public class DeleteEmployeeWithIdExecutor implements Command {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 
         } catch (ServiceException e) {
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE, UNABLE_TO_DELETE_THE_EMPLOYEE);
+            request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_DELETE_THE_EMPLOYEE);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         }
 

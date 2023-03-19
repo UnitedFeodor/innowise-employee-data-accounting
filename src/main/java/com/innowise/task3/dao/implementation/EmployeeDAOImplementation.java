@@ -105,49 +105,8 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
              PreparedStatement updateStatement = connection.prepareStatement(UPDATE_EMPLOYEE)){
 
-            String password = employee.getPassword();
-            if (password != null) {
-                String salt = BCrypt.gensalt();
-                String hashedPassword = BCrypt.hashpw(password,salt);
-                employee.setPassword(hashedPassword);
-            }
-
-
-            List<Object> employeeFields = Arrays.asList(
-                    employee.getName(),
-                    employee.getSurname(),
-                    employee.getPosition(),
-                    employee.getBirthDate(),
-                    employee.getRole() != null && employee.getRole().getId() > 0
-                            ? employee.getRole().getId()
-                            : null,
-                    employee.getCompany() != null && employee.getCompany().getId() > 0
-                            ? employee.getCompany().getId()
-                            : null,
-                    employee.getEmail(),
-                    employee.getPassword()
-            );
-
-            // 1 2  3 4  5 6  7 8
             int statementPlaceholderCount = (int) UPDATE_EMPLOYEE.chars().filter(ch -> ch == '?').count();
-            int statementIndex = 1;
-            while(statementIndex < statementPlaceholderCount) {
-                Object employeeField = employeeFields.get(statementIndex / 2);
-                for (int i = 0; i < 2; i++) {
-
-                    if(employeeField instanceof String) {
-                        updateStatement.setString(statementIndex++, (String) employeeField);
-                    } else if (employeeField instanceof Integer) {
-                        updateStatement.setInt(statementIndex++, (Integer) employeeField);
-                    } else if(employeeField instanceof LocalDate) {
-                        updateStatement.setDate(statementIndex++, Date.valueOf((LocalDate) employeeField));
-                    } else {
-                        updateStatement.setObject(statementIndex++,employeeField);
-                    }
-                }
-            }
-
-            updateStatement.setInt(statementPlaceholderCount,employee.getId());
+            fillUpdateStatement(employee, statementPlaceholderCount, updateStatement);
 
             int affectedRows = updateStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -160,6 +119,8 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             throw new DAOException(e);
         }
     }
+
+
 
     @Override
     public Employee addEmployee(Employee employee) throws DAOException  {
@@ -272,5 +233,50 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
         Company company = new Company(resultSet.getInt(E_COMPANY_ID), null);
         employee.setCompany(company);
         return employee;
+    }
+
+    private void fillUpdateStatement(Employee employee, int statementPlaceholderCount, PreparedStatement updateStatement) throws SQLException {
+        String password = employee.getPassword();
+        if (password != null) {
+            String salt = BCrypt.gensalt();
+            String hashedPassword = BCrypt.hashpw(password,salt);
+            employee.setPassword(hashedPassword);
+        }
+
+        List<Object> employeeFields = Arrays.asList(
+                employee.getName(),
+                employee.getSurname(),
+                employee.getPosition(),
+                employee.getBirthDate(),
+                employee.getRole() != null && employee.getRole().getId() > 0
+                        ? employee.getRole().getId()
+                        : null,
+                employee.getCompany() != null && employee.getCompany().getId() > 0
+                        ? employee.getCompany().getId()
+                        : null,
+                employee.getEmail(),
+                employee.getPassword()
+        );
+
+        // 1 2  3 4  5 6  7 8
+
+        int statementIndex = 1;
+        while(statementIndex < statementPlaceholderCount) {
+            Object employeeField = employeeFields.get(statementIndex / 2);
+            for (int i = 0; i < 2; i++) {
+
+                if(employeeField instanceof String) {
+                    updateStatement.setString(statementIndex++, (String) employeeField);
+                } else if (employeeField instanceof Integer) {
+                    updateStatement.setInt(statementIndex++, (Integer) employeeField);
+                } else if(employeeField instanceof LocalDate) {
+                    updateStatement.setDate(statementIndex++, Date.valueOf((LocalDate) employeeField));
+                } else {
+                    updateStatement.setObject(statementIndex++,employeeField);
+                }
+            }
+        }
+
+        updateStatement.setInt(statementPlaceholderCount, employee.getId());
     }
 }

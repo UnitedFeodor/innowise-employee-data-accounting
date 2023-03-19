@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class AddEmployeeExecutor implements Command {
 
@@ -35,7 +34,7 @@ public class AddEmployeeExecutor implements Command {
             ControllerUtils.writeJSONResponse(response,employeeJsonString, HttpServletResponse.SC_CREATED);
 
         } catch (ServiceException e) {
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE, UNABLE_TO_ADD_THE_EMPLOYEE);
+            request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_ADD_THE_EMPLOYEE);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         }
 

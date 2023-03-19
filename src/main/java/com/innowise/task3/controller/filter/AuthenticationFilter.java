@@ -2,6 +2,7 @@ package com.innowise.task3.controller.filter;
 
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.CommandProvider;
+import com.innowise.task3.controller.implementation.InvalidRequestExecutor;
 import com.innowise.task3.controller.implementation.LoginExecutor;
 import com.innowise.task3.controller.security.PermissionEvaluator;
 import jakarta.servlet.*;
@@ -36,7 +37,7 @@ public class AuthenticationFilter implements Filter {
         if (commandName != CommandName.LOGIN
                 && !permissionEvaluator.isAccessLevelEnoughForCommand(roleId,commandName)) {
             //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE, REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL);
+            request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         } else {
             chain.doFilter(request, response);

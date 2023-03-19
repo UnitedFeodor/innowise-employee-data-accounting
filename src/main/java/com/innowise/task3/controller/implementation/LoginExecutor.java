@@ -19,10 +19,8 @@ import java.io.IOException;
 
 public class LoginExecutor implements Command {
 
-    // TODO put constants elsewhere i guess
     public static final String ID_TOKEN = "idToken";
     public static final String ROLE_TOKEN = "accessToken";
-    public static final String ERROR_MESSAGE = "errorMessage";
     private static final String INVALID_ACCOUNT_DATA = "Invalid account data";
     private static final String UNABLE_TO_LOGIN = "Unable to login";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
@@ -44,12 +42,12 @@ public class LoginExecutor implements Command {
                 ControllerUtils.writeJSONResponse(response,employeeJsonString, HttpServletResponse.SC_OK);
 
             } else {
-                request.setAttribute(ERROR_MESSAGE, INVALID_ACCOUNT_DATA);
+                request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, INVALID_ACCOUNT_DATA);
                 request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request, response);
 
             }
         } catch (ServiceException e) {
-            request.setAttribute(LoginExecutor.ERROR_MESSAGE, UNABLE_TO_LOGIN);
+            request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_LOGIN);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         } 
     }

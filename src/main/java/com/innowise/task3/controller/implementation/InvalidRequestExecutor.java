@@ -10,16 +10,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class InvalidRequestExecutor implements Command {
 
+    public static final String ERROR_MESSAGE = "errorMessage";
     private static final String ERROR = "error";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String errorMessage = (String) request.getAttribute(LoginExecutor.ERROR_MESSAGE);
+        String errorMessage = (String) request.getAttribute(ERROR_MESSAGE);
 
         ObjectNode errorJsonNode = objectMapper.createObjectNode();
         errorJsonNode.put(ERROR,errorMessage);
