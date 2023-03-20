@@ -14,6 +14,7 @@ public class CommandExecutorTest {
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
 
+    // TODO add executor tests, service tests, filter tests, security test
     // TODO debug to be removed
     @Test
     void json() {

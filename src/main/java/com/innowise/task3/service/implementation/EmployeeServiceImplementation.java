@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeeServiceImplementation implements EmployeeService {
-    // TODO add validation
-    // TODO only for user's company
+    // TODO add more validation
 
     EmployeeDAO employeeDAO = DAOProvider.getInstance().getEmployeeDAO();
 
@@ -23,6 +22,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public List<EmployeeDTO> getAllEmployees(int companyId) throws ServiceException {
         try {
+            if (companyId < 0) {
+                throw new ServiceException("companyId is < 0");
+            }
+
             List<Employee> allEmployeesFromCompany =
                     employeeDAO.getAllEmployees()
                             .stream()
@@ -38,6 +41,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeWithId(int id) throws ServiceException {
         try {
+            if (id < 0) {
+                throw new ServiceException("id is < 0");
+            }
+
             return employeeMapper.employeeToEmployeeDTO(employeeDAO.getEmployeeWithId(id));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -69,6 +76,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public void deleteEmployee(int id) throws ServiceException {
         try {
+            if (id < 0) {
+                throw new ServiceException("id is < 0");
+            }
+
             employeeDAO.deleteEmployee(id);
         } catch (DAOException e) {
             throw new ServiceException(e);

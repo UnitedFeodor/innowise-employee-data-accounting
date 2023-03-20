@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,7 +97,17 @@ public class EmployeeDAOTest {
 
         Employee editedEmployee = employeeDAO.editEmployee(employee);
 
+        Employee fullEditedEmployeeInfo = employeeDAO.getEmployeeWithId(employeeId);
         assertNotNull(editedEmployee);
+        assertTrue(Stream.of(fullEditedEmployeeInfo.getId(),
+                        fullEditedEmployeeInfo.getName(),
+                        fullEditedEmployeeInfo.getSurname(),
+                        fullEditedEmployeeInfo.getPosition(),
+                        fullEditedEmployeeInfo.getRole(),
+                        fullEditedEmployeeInfo.getCompany(),
+                        fullEditedEmployeeInfo.getEmail(),
+                        fullEditedEmployeeInfo.getBirthDate())
+                .allMatch(Objects::nonNull));
     }
 
     @Test
@@ -130,16 +142,25 @@ public class EmployeeDAOTest {
         // get last inserted
         int id = employeeDAO.getAllEmployees().stream().max(Comparator.comparing(Employee::getId)).map(e -> e.getId()).orElseThrow();
 
+        List<Employee> employees = employeeDAO.getAllEmployees();
+        assertTrue(employees.stream().anyMatch(e -> e.getId() == id));
+
         assertDoesNotThrow(() -> employeeDAO.deleteEmployee(id));
+
+        List<Employee> employeesAfterDelete = employeeDAO.getAllEmployees();
+        assertTrue(employeesAfterDelete.stream().noneMatch(e -> e.getId() == id));
 
     }
 
     @Test
-    void signIn() throws DAOException {
+    void login() throws DAOException {
         String password = "password";
         String email = "unabomber@gmail.com";
 
-        assertNotNull(employeeDAO.login(email, password));
+        Employee loggedInEmployee = employeeDAO.login(email, password);
+
+        assertNotNull(loggedInEmployee);
+        assertEquals(email,loggedInEmployee.getEmail());
     }
 
 }
