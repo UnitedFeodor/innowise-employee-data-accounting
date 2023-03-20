@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeDAOTest {
     EmployeeDAO employeeDAO = new EmployeeDAOImplementation();
@@ -16,83 +19,127 @@ public class EmployeeDAOTest {
     @Test
     void getAllEmployees() throws DAOException {
         List<Employee> employees = employeeDAO.getAllEmployees();
-        System.out.println(employees);
+        assertNotNull(employees);
     }
 
     @Test
     void getEmployeeWithId() throws DAOException {
-        Employee employee = employeeDAO.getEmployeeWithId(1);
-        System.out.println(employee);
+        int employeeId = 1;
+
+        Employee employee = employeeDAO.getEmployeeWithId(employeeId);
+
+        assertNotNull(employee);
+        assertEquals(employeeId,employee.getId());
     }
 
     @Test
     void addEmployee() throws DAOException {
         Employee employee = new Employee();
-        employee.setName("a");
-        employee.setSurname("b");
-        employee.setPosition("c");
+        String name = "a";
+        employee.setName(name);
+        String surname = "b";
+        employee.setSurname(surname);
+
+        String position = "c";
+        employee.setPosition(position);
+
         employee.setRole(new Role(1,""));
         employee.setCompany(new Company(2,""));
-        employee.setBirthDate(LocalDate.of(2001,9,11));
-        employee.setEmail("d");
-        employee.setPassword("e");
+
+        LocalDate birthDate = LocalDate.of(2001, 9, 11);
+        employee.setBirthDate(birthDate);
+
+        String email = "d";
+        employee.setEmail(email);
+        String password = "e";
+        employee.setPassword(password);
+
         Employee insertedEmployee = employeeDAO.addEmployee(employee);
 
-        System.out.println(insertedEmployee);
+        assertNotNull(insertedEmployee);
+        assertNotNull(insertedEmployee.getId());
 
+        assertEquals(insertedEmployee.getName(),name);
+        assertEquals(insertedEmployee.getSurname(),surname);
+        assertEquals(insertedEmployee.getPosition(),position);
+
+        assertEquals(insertedEmployee.getEmail(),email);
+        assertEquals(insertedEmployee.getPassword(),password);
     }
 
     @Test
     void editEmployeeAllFields() throws DAOException {
         Employee employee = new Employee();
-        employee.setId(7);
-        employee.setName("aasdas");
-        employee.setSurname("bsadasd");
-        employee.setPosition("cgsdffsd");
-        employee.setRole(new Role(2,""));
-        employee.setCompany(new Company(1,""));
-        employee.setBirthDate(LocalDate.of(1991,2,22));
-        employee.setEmail("dasdas@gmail.com");
-        employee.setPassword("eeeeeeeeeb");
+
+        int employeeId = 3;
+        employee.setId(employeeId);
+
+        String name = "asdasdsa";
+        employee.setName(name);
+        String surname = "bqwewqe";
+        employee.setSurname(surname);
+
+        String position = "casdasd";
+        employee.setPosition(position);
+
+        employee.setRole(new Role(1,""));
+        employee.setCompany(new Company(2,""));
+
+        LocalDate birthDate = LocalDate.of(1991, 1, 21);
+        employee.setBirthDate(birthDate);
+
+        String email = "dasdasddas";
+        employee.setEmail(email);
+        String password = "password";
+        employee.setPassword(password);
+
         Employee editedEmployee = employeeDAO.editEmployee(employee);
 
-        System.out.println(editedEmployee);
+        assertNotNull(editedEmployee);
     }
 
     @Test
     void editEmployeeNotAllFields() throws DAOException {
         Employee employee = new Employee();
-        employee.setId(3);
-//        employee.setName("aasdas");
-//        employee.setPosition("cgsdffsd");
-//        employee.setCompany(new Company(1,""));
-//        employee.setBirthDate(LocalDate.of(1992,12,7));
-        employee.setPassword("password");
+
+        int employeeId = 3;
+        employee.setId(employeeId);
+
+        String password = "password";
+        employee.setPassword(password);
+
         Employee editedEmployee = employeeDAO.editEmployee(employee);
 
-        System.out.println(editedEmployee);
+        assertNotNull(editedEmployee);
     }
 
     @Test
     void editEmployeeNoFields() throws DAOException {
         Employee employee = new Employee();
-        employee.setId(9);
+
+        int employeeId = 9;
+        employee.setId(employeeId);
+
         Employee editedEmployee = employeeDAO.editEmployee(employee);
 
-        System.out.println(editedEmployee);
+        assertNotNull(editedEmployee);
     }
 
     @Test
     void deleteEmployee() throws DAOException {
-        int id = 10;
-        employeeDAO.deleteEmployee(id);
+        // get last inserted
+        int id = employeeDAO.getAllEmployees().stream().max(Comparator.comparing(Employee::getId)).map(e -> e.getId()).orElseThrow();
+
+        assertDoesNotThrow(() -> employeeDAO.deleteEmployee(id));
+
     }
 
     @Test
     void signIn() throws DAOException {
-        String email = "jack@yahoo.com";
         String password = "password";
-        Assertions.assertTrue(employeeDAO.login(email,password) != null);
+        String email = "unabomber@gmail.com";
+
+        assertNotNull(employeeDAO.login(email, password));
     }
 
 }

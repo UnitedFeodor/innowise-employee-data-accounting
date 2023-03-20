@@ -13,6 +13,7 @@ import java.util.List;
 
 public class EmployeeServiceImplementation implements EmployeeService {
     // TODO add validation
+    // TODO only for user's company
 
     EmployeeDAO employeeDAO = DAOProvider.getInstance().getEmployeeDAO();
 
