@@ -23,6 +23,7 @@ public class DeleteEmployeeWithIdExecutor implements Command {
 
         try {
             int employeeId = ControllerUtils.getIdFromLastQuerySegment(request.getServletPath());
+
             employeeService.deleteEmployee(employeeId);
 
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);

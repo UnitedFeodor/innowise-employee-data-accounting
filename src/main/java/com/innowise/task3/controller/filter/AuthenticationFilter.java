@@ -5,19 +5,29 @@ import com.innowise.task3.controller.CommandProvider;
 import com.innowise.task3.controller.implementation.InvalidRequestExecutor;
 import com.innowise.task3.controller.implementation.LoginExecutor;
 import com.innowise.task3.controller.security.PermissionEvaluator;
+import com.innowise.task3.controller.utils.ControllerUtils;
+import com.innowise.task3.dto.EmployeeDTO;
+import com.innowise.task3.service.EmployeeService;
+import com.innowise.task3.service.ServiceException;
+import com.innowise.task3.service.ServiceProvider;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
-    private static final String REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL = "request not permitted for this access level";
-    private final CommandProvider provider = new CommandProvider();
+    private static final String INVALID_REQUEST_URI = String.valueOf(CommandName.INVALID_REQUEST.getUri());
+    private static final String REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL = "Request not permitted for this access level";
+    private static final String CAN_NOT_ACCESS_OTHER_COMPANYS_EMPLOYEES = "Can not access other company's employees";
+    private final CommandProvider provider = CommandProvider.getInstance();
     private final PermissionEvaluator permissionEvaluator = new PermissionEvaluator();
+
+    private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -34,11 +44,35 @@ public class AuthenticationFilter implements Filter {
 
         HttpSession session = httpServletRequest.getSession(false);
         int roleId = (int) session.getAttribute(LoginExecutor.ROLE_TOKEN);
+        int usersCompanyId = (int) session.getAttribute(LoginExecutor.COMPANY_ID);
+
+        // role check
         if (commandName != CommandName.LOGIN
                 && !permissionEvaluator.isAccessLevelEnoughForCommand(roleId,commandName)) {
-            //((HttpServletResponse) response).sendRedirect(CommandName.URI.ERROR);
+
             request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, REQUEST_NOT_PERMITTED_FOR_THIS_ACCESS_LEVEL);
-            request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
+            request.getRequestDispatcher(INVALID_REQUEST_URI).forward(request,response);
+            return;
+
+        }
+
+        // company check
+        if (commandName.getUri().equals(CommandName.URI.EMPLOYEE)) {
+
+            int requestUserId = ControllerUtils.getIdFromLastQuerySegment(httpServletRequest.getServletPath());
+
+            try {
+                EmployeeDTO employeeDTO = employeeService.getEmployeeWithId(requestUserId);
+                if (employeeDTO.getCompany() != usersCompanyId) {
+                    throw new ServiceException();
+                }
+                chain.doFilter(request, response);
+
+            } catch (ServiceException e) {
+                request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, CAN_NOT_ACCESS_OTHER_COMPANYS_EMPLOYEES);
+                request.getRequestDispatcher(INVALID_REQUEST_URI).forward(request,response);
+            }
+
         } else {
             chain.doFilter(request, response);
         }

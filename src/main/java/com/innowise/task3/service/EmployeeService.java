@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    List<EmployeeDTO> getAllEmployees() throws ServiceException;
+    List<EmployeeDTO> getAllEmployees(int companyId) throws ServiceException;
 
     EmployeeDTO getEmployeeWithId(int id) throws ServiceException;
 

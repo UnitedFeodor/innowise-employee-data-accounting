@@ -10,6 +10,7 @@ import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeServiceImplementation implements EmployeeService {
     // TODO add validation
@@ -20,9 +21,15 @@ public class EmployeeServiceImplementation implements EmployeeService {
     EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
 
     @Override
-    public List<EmployeeDTO> getAllEmployees() throws ServiceException {
+    public List<EmployeeDTO> getAllEmployees(int companyId) throws ServiceException {
         try {
-            return employeeMapper.employeeListToEmployeeDTOList(employeeDAO.getAllEmployees());
+            List<Employee> allEmployeesFromCompany =
+                    employeeDAO.getAllEmployees()
+                            .stream()
+                            .filter(e -> e.getCompany().getId() == companyId)
+                            .collect(Collectors.toList());
+
+            return employeeMapper.employeeListToEmployeeDTOList(allEmployeesFromCompany);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

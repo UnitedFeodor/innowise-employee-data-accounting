@@ -21,8 +21,10 @@ public class LoginExecutor implements Command {
 
     public static final String ID_TOKEN = "idToken";
     public static final String ROLE_TOKEN = "accessToken";
+    public static final String COMPANY_ID = "companyId";
     private static final String INVALID_ACCOUNT_DATA = "Invalid account data";
     private static final String UNABLE_TO_LOGIN = "Unable to login";
+
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
 
@@ -31,13 +33,14 @@ public class LoginExecutor implements Command {
         try {
             LoginDTO loginDTO = objectMapper.readValue(request.getReader(), LoginDTO.class);
 
-            EmployeeDTO employee = employeeService.login(loginDTO);
-            if (employee != null) {
+            EmployeeDTO employeeDTO = employeeService.login(loginDTO);
+            if (employeeDTO != null) {
                 HttpSession session = request.getSession(true);
-                session.setAttribute(ID_TOKEN, employee.getId());
-                session.setAttribute(ROLE_TOKEN, employee.getRole());
+                session.setAttribute(ID_TOKEN, employeeDTO.getId());
+                session.setAttribute(ROLE_TOKEN, employeeDTO.getRole());
+                session.setAttribute(COMPANY_ID, employeeDTO.getCompany());
 
-                String employeeJsonString = objectMapper.writeValueAsString(employee);
+                String employeeJsonString = objectMapper.writeValueAsString(employeeDTO);
 
                 ControllerUtils.writeJSONResponse(response,employeeJsonString, HttpServletResponse.SC_OK);
 

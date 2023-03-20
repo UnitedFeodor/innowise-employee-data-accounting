@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.innowise</groupId>
-    <artifactId>task3-employee-data-accounting</artifactId>
+    <artifactId>task3</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>task3-employee-data-accounting</name>
+    <name>task3</name>
     <packaging>war</packaging>
 
     <properties>

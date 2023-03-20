@@ -19,6 +19,7 @@ import java.io.IOException;
 public class AddEmployeeExecutor implements Command {
 
     private static final String UNABLE_TO_ADD_THE_EMPLOYEE = "Unable to add the employee";
+    private static final String UNABLE_TO_ADD_THE_EMPLOYEE_TO_ANOTHER_COMPANY = "Unable to add the employee to another company";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
     @Override
@@ -26,14 +27,21 @@ public class AddEmployeeExecutor implements Command {
 
         try {
             AddEmployeeDTO addEmployeeDTO = objectMapper.readValue(request.getReader(), AddEmployeeDTO.class);
-            EmployeeDTO employeeDTO = employeeService.addEmployee(addEmployeeDTO);
 
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            String employeeJsonString = objectMapper.writeValueAsString(employeeDTO);
+            int usersCompanyId = (int)request.getSession(false).getAttribute(LoginExecutor.COMPANY_ID);
+            if (addEmployeeDTO.getCompany() == usersCompanyId) {
 
-            ControllerUtils.writeJSONResponse(response,employeeJsonString, HttpServletResponse.SC_CREATED);
+                EmployeeDTO employeeDTO = employeeService.addEmployee(addEmployeeDTO);
 
-        } catch (ServiceException e) {
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                String employeeJsonString = objectMapper.writeValueAsString(employeeDTO);
+
+                ControllerUtils.writeJSONResponse(response, employeeJsonString, HttpServletResponse.SC_CREATED);
+            } else {
+                request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_ADD_THE_EMPLOYEE_TO_ANOTHER_COMPANY);
+                request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
+            }
+        } catch (ServiceException | IllegalArgumentException e) {
             request.setAttribute(InvalidRequestExecutor.ERROR_MESSAGE, UNABLE_TO_ADD_THE_EMPLOYEE);
             request.getRequestDispatcher(String.valueOf(CommandName.INVALID_REQUEST.getUri())).forward(request,response);
         }

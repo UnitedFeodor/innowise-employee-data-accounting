@@ -12,7 +12,7 @@ import java.io.IOException;
         name = "DispatcherServlet"
 )
 public class DispatcherServlet extends HttpServlet {
-    private final CommandProvider provider = new CommandProvider();
+    private final CommandProvider provider = CommandProvider.getInstance();
 
     private static final String REQ_PARAM_COMMAND = "command";
 

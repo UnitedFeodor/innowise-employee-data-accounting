@@ -26,7 +26,9 @@ public class GetEmployeesExecutor implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            List<EmployeeDTO> employeeList = employeeService.getAllEmployees();
+
+            int companyId = (int) request.getSession(false).getAttribute(LoginExecutor.COMPANY_ID);
+            List<EmployeeDTO> employeeList = employeeService.getAllEmployees(companyId);
 
             String employeesJsonString = objectMapper.writeValueAsString(employeeList);
 

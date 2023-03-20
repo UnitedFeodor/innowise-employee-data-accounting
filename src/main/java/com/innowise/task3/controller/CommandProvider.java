@@ -7,9 +7,11 @@ import java.util.Map;
 
 public class CommandProvider {
 
+    private static final CommandProvider INSTANCE = new CommandProvider();
+
     private final Map<CommandName, Command> commands = new HashMap<>();
 
-    public CommandProvider() {
+    private CommandProvider() {
         commands.put(CommandName.ADD_EMPLOYEE, new AddEmployeeExecutor());
         commands.put(CommandName.DELETE_EMPLOYEE_WITH_ID, new DeleteEmployeeWithIdExecutor());
         commands.put(CommandName.EDIT_EMPLOYEE_WITH_ID, new EditEmployeeWithIdExecutor());
@@ -20,6 +22,9 @@ public class CommandProvider {
         commands.put(CommandName.LOGOUT, new LogoutExecutor());
     }
 
+    public static CommandProvider getInstance() {
+        return INSTANCE;
+    }
 
     public Command getCommand(String uri, String httpMethod) {
         return commands.get(getCommandName(uri, httpMethod));

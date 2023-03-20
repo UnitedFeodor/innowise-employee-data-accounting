@@ -15,7 +15,7 @@ import java.io.IOException;
 public class AuthorizationFilter implements Filter {
 
     private static final String REQUEST_NOT_AUTHORIZED = "Request not authorized";
-    private final CommandProvider provider = new CommandProvider();
+    private final CommandProvider provider = CommandProvider.getInstance();
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
