@@ -1,14 +1,14 @@
 package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandExecutor;
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.listener.SessionStorage;
 import com.innowise.task3.controller.listener.SessionStorageProvider;
 import com.innowise.task3.controller.utils.ControllerUtils;
-import com.innowise.task3.dto.EditEmployeeDTO;
-import com.innowise.task3.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.EditEmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 import com.innowise.task3.service.ServiceProvider;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class EditEmployeeWithIdExecutor implements Command {
+public class EditEmployeeWithIdExecutor implements CommandExecutor {
 
     private static final String UNABLE_TO_EDIT_THE_EMPLOYEE = "Unable to edit the employee";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();

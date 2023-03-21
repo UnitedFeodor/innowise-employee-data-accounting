@@ -40,7 +40,7 @@ public class DispatcherServlet extends HttpServlet {
         String commandName = request.getServletPath();
         String httpMethod = request.getMethod();
 
-        Command command = provider.getCommand(commandName, httpMethod);
-        command.execute(request, response);
+        CommandExecutor commandExecutor = provider.getCommandExecutor(commandName, httpMethod);
+        commandExecutor.execute(request, response);
     }
 }

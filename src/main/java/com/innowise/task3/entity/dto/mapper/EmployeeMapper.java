@@ -1,9 +1,12 @@
-package com.innowise.task3.mapper;
+package com.innowise.task3.entity.dto.mapper;
 
-import com.innowise.task3.dto.*;
 import com.innowise.task3.entity.Company;
 import com.innowise.task3.entity.Employee;
 import com.innowise.task3.entity.Role;
+import com.innowise.task3.entity.dto.AddEmployeeDTO;
+import com.innowise.task3.entity.dto.EditEmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.LoginDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

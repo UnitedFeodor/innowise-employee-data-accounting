@@ -9,7 +9,7 @@ public class CommandProvider {
 
     private static final CommandProvider INSTANCE = new CommandProvider();
 
-    private final Map<CommandName, Command> commands = new HashMap<>();
+    private final Map<CommandName, CommandExecutor> commands = new HashMap<>();
 
     private CommandProvider() {
         commands.put(CommandName.ADD_EMPLOYEE, new AddEmployeeExecutor());
@@ -26,7 +26,7 @@ public class CommandProvider {
         return INSTANCE;
     }
 
-    public Command getCommand(String uri, String httpMethod) {
+    public CommandExecutor getCommandExecutor(String uri, String httpMethod) {
         return commands.get(getCommandName(uri, httpMethod));
     }
 

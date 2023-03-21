@@ -1,7 +1,7 @@
 package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandExecutor;
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.utils.ControllerUtils;
@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class DeleteEmployeeWithIdExecutor implements Command {
+public class DeleteEmployeeWithIdExecutor implements CommandExecutor {
     private static final String UNABLE_TO_DELETE_THE_EMPLOYEE = "Unable to delete the employee";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();

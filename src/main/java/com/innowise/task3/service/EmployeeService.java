@@ -1,6 +1,9 @@
 package com.innowise.task3.service;
 
-import com.innowise.task3.dto.*;
+import com.innowise.task3.entity.dto.AddEmployeeDTO;
+import com.innowise.task3.entity.dto.EditEmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.LoginDTO;
 
 import java.util.List;
 

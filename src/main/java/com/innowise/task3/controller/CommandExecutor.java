@@ -6,6 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public interface Command {
+public interface CommandExecutor {
     void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

@@ -1,4 +1,4 @@
-package com.innowise.task3.dto;
+package com.innowise.task3.entity.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

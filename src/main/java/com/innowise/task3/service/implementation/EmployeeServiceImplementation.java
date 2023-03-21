@@ -3,9 +3,12 @@ package com.innowise.task3.service.implementation;
 import com.innowise.task3.dao.DAOException;
 import com.innowise.task3.dao.DAOProvider;
 import com.innowise.task3.dao.EmployeeDAO;
-import com.innowise.task3.dto.*;
 import com.innowise.task3.entity.Employee;
-import com.innowise.task3.mapper.EmployeeMapper;
+import com.innowise.task3.entity.dto.AddEmployeeDTO;
+import com.innowise.task3.entity.dto.EditEmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.LoginDTO;
+import com.innowise.task3.entity.dto.mapper.EmployeeMapper;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 
@@ -13,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeeServiceImplementation implements EmployeeService {
-    // TODO add more validation
 
     EmployeeDAO employeeDAO = DAOProvider.getInstance().getEmployeeDAO();
 

@@ -1,12 +1,12 @@
 package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandExecutor;
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.utils.ControllerUtils;
-import com.innowise.task3.dto.EmployeeDTO;
-import com.innowise.task3.dto.LoginDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.LoginDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 import com.innowise.task3.service.ServiceProvider;
@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-public class LoginExecutor implements Command {
+public class LoginExecutor implements CommandExecutor {
 
     public static final String ID_TOKEN = "idToken";
     public static final String ROLE_TOKEN = "accessToken";

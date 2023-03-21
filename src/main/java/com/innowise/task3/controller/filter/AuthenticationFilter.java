@@ -6,7 +6,7 @@ import com.innowise.task3.controller.implementation.InvalidRequestExecutor;
 import com.innowise.task3.controller.implementation.LoginExecutor;
 import com.innowise.task3.controller.security.PermissionEvaluator;
 import com.innowise.task3.controller.utils.ControllerUtils;
-import com.innowise.task3.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 import com.innowise.task3.service.ServiceProvider;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {

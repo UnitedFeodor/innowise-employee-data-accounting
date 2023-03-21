@@ -2,7 +2,7 @@ package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandExecutor;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.utils.ControllerUtils;
 import jakarta.servlet.ServletException;
@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class InvalidRequestExecutor implements Command {
+public class InvalidRequestExecutor implements CommandExecutor {
 
     public static final String ERROR_MESSAGE = "errorMessage";
     private static final String ERROR = "error";

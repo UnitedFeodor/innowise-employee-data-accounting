@@ -1,11 +1,11 @@
 package com.innowise.task3.controller.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innowise.task3.controller.Command;
+import com.innowise.task3.controller.CommandExecutor;
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.json.mapper.ObjectMapperProvider;
 import com.innowise.task3.controller.utils.ControllerUtils;
-import com.innowise.task3.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 import com.innowise.task3.service.ServiceProvider;
@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class GetEmployeeWithIdExecutor implements Command {
+public class GetEmployeeWithIdExecutor implements CommandExecutor {
     private static final String UNABLE_TO_GET_EMPLOYEE_DATA = "Unable to get employee data";
     private final ObjectMapper objectMapper = ObjectMapperProvider.getInstance().getObjectMapper();
     private final EmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();

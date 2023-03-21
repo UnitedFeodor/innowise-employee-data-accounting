@@ -1,14 +1,13 @@
-package com.innowise.task3.dto;
+package com.innowise.task3.entity.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
-public class EditEmployeeDTO {
-
-    Integer id;
+public class AddEmployeeDTO {
     String name;
     String surname;
     String position;
@@ -17,4 +16,5 @@ public class EditEmployeeDTO {
     String password;
     Integer company;
     Integer role;
+
 }

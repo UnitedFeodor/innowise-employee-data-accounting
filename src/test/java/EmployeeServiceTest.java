@@ -1,14 +1,10 @@
-import com.innowise.task3.dto.AddEmployeeDTO;
-import com.innowise.task3.dto.EditEmployeeDTO;
-import com.innowise.task3.dto.EmployeeDTO;
-import com.innowise.task3.dto.LoginDTO;
-import com.innowise.task3.entity.Company;
-import com.innowise.task3.entity.Employee;
-import com.innowise.task3.entity.Role;
+import com.innowise.task3.entity.dto.AddEmployeeDTO;
+import com.innowise.task3.entity.dto.EditEmployeeDTO;
+import com.innowise.task3.entity.dto.EmployeeDTO;
+import com.innowise.task3.entity.dto.LoginDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
 import com.innowise.task3.service.ServiceProvider;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
