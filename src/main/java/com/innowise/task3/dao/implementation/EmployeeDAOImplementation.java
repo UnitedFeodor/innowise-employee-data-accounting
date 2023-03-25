@@ -31,7 +31,6 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public static final String E_COMPANY_NAME = "e_company_name";
 
     public static final String E_PASSWORD = "e_password";
-    // TODO add commits and rollbacks
 
     @Override
     public List<Employee> getAllEmployees() throws DAOException {
@@ -55,6 +54,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             return employees;
 
         } catch (SQLException e) {
+
             throw new DAOException(e);
         }
     }
@@ -102,19 +102,27 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
                 "e_password = CASE WHEN ? IS NULL THEN e_password ELSE ? END " +
                 "WHERE e_id = ?";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-             PreparedStatement updateStatement = connection.prepareStatement(UPDATE_EMPLOYEE)){
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
 
-            int statementPlaceholderCount = (int) UPDATE_EMPLOYEE.chars().filter(ch -> ch == '?').count();
-            fillUpdateStatement(employee, statementPlaceholderCount, updateStatement);
+            connection.setAutoCommit(false);
+            try (PreparedStatement updateStatement = connection.prepareStatement(UPDATE_EMPLOYEE)) {
 
-            int affectedRows = updateStatement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Updating user failed, no rows affected.");
+                int statementPlaceholderCount = (int) UPDATE_EMPLOYEE.chars().filter(ch -> ch == '?').count();
+                fillUpdateStatement(employee, statementPlaceholderCount, updateStatement);
+
+                int affectedRows = updateStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DAOException("Updating user failed, no rows affected.");
+                }
+
+                return employee;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new SQLException(e);
+            } finally {
+                connection.setAutoCommit(true);
             }
 
-
-            return employee;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -128,36 +136,45 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
                 "INSERT INTO employee (e_name,e_surname,e_position,e_birth_date,e_role_id,e_company_id,e_email,e_password) " +
                         "VALUES (?,?,?,?,?,?,?,?)";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-             PreparedStatement insertStatement = connection.prepareStatement(INSERT_EMPLOYEE,Statement.RETURN_GENERATED_KEYS)){
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
 
-            insertStatement.setString(1,employee.getName());
-            insertStatement.setString(2,employee.getSurname());
-            insertStatement.setString(3,employee.getPosition());
-            insertStatement.setDate(4,Date.valueOf(employee.getBirthDate()));
-            insertStatement.setInt(5,employee.getRole().getId());
-            insertStatement.setInt(6,employee.getCompany().getId());
-            insertStatement.setString(7,employee.getEmail());
+            connection.setAutoCommit(false);
+            try (PreparedStatement insertStatement = connection.prepareStatement(INSERT_EMPLOYEE, Statement.RETURN_GENERATED_KEYS)) {
 
-            String password = employee.getPassword();
-            String salt = BCrypt.gensalt();
-            String hashedPassword = BCrypt.hashpw(password,salt);
-            insertStatement.setString(8,hashedPassword);
+                insertStatement.setString(1, employee.getName());
+                insertStatement.setString(2, employee.getSurname());
+                insertStatement.setString(3, employee.getPosition());
+                insertStatement.setDate(4, Date.valueOf(employee.getBirthDate()));
+                insertStatement.setInt(5, employee.getRole().getId());
+                insertStatement.setInt(6, employee.getCompany().getId());
+                insertStatement.setString(7, employee.getEmail());
 
-            int affectedRows = insertStatement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Creating user failed, no rows affected.");
-            }
+                String password = employee.getPassword();
+                String salt = BCrypt.gensalt();
+                String hashedPassword = BCrypt.hashpw(password, salt);
+                insertStatement.setString(8, hashedPassword);
 
-            try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    employee.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new DAOException("Creating user failed, no ID obtained.");
+                int affectedRows = insertStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DAOException("Creating user failed, no rows affected.");
                 }
+
+                try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        employee.setId(generatedKeys.getInt(1));
+                    } else {
+                        throw new DAOException("Creating user failed, no ID obtained.");
+                    }
+                }
+
+                return employee;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new SQLException(e);
+            } finally {
+                connection.setAutoCommit(true);
             }
 
-            return employee;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -168,14 +185,22 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public void deleteEmployee(int id) throws DAOException  {
         final String DELETE_EMPLOYEE_WITH_ID = "DELETE FROM employee WHERE e_id = ?";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-             PreparedStatement deleteStatement = connection.prepareStatement(DELETE_EMPLOYEE_WITH_ID)){
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
 
-            deleteStatement.setInt(1,id);
+            connection.setAutoCommit(false);
+            try (PreparedStatement deleteStatement = connection.prepareStatement(DELETE_EMPLOYEE_WITH_ID)) {
 
-            int affectedRows = deleteStatement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Deleting user failed, no rows affected.");
+                deleteStatement.setInt(1, id);
+
+                int affectedRows = deleteStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DAOException("Deleting user failed, no rows affected.");
+                }
+
+            } catch (SQLException e) {
+                connection.rollback();
+            } finally {
+                connection.setAutoCommit(true);
             }
 
         } catch (SQLException e) {
