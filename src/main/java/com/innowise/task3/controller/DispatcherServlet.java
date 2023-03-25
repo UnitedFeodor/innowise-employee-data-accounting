@@ -17,7 +17,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final String REQ_PARAM_COMMAND = "command";
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         parseAndExecuteCommand(req,resp);
     }
 
