@@ -1,6 +1,4 @@
-package com.innowise.task3.controller.listener;
-
-import com.innowise.task3.dao.DAOProvider;
+package com.innowise.task3.listener;
 
 public class SessionStorageProvider {
 

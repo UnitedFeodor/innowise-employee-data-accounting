@@ -1,4 +1,4 @@
-package com.innowise.task3.controller.utils;
+package com.innowise.task3.utils;
 
 import jakarta.servlet.http.HttpServletResponse;
 

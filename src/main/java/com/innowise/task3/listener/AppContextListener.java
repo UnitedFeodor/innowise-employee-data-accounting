@@ -1,4 +1,4 @@
-package com.innowise.task3.controller.listener;
+package com.innowise.task3.listener;
 
 import com.innowise.task3.dao.DAOException;
 import com.innowise.task3.dao.implementation.EmployeeDAOImplementation;
