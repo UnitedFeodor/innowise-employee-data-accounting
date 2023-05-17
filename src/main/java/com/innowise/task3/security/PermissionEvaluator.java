@@ -1,4 +1,4 @@
-package com.innowise.task3.controller.security;
+package com.innowise.task3.security;
 
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.implementation.*;

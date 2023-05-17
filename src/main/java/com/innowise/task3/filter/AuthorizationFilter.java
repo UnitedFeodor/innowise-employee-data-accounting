@@ -1,4 +1,4 @@
-package com.innowise.task3.controller.filter;
+package com.innowise.task3.filter;
 
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.CommandProvider;

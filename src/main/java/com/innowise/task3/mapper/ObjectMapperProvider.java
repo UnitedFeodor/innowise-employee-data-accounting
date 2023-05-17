@@ -1,8 +1,7 @@
-package com.innowise.task3.controller.json.mapper;
+package com.innowise.task3.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.innowise.task3.dao.DAOProvider;
 
 public class ObjectMapperProvider {
 

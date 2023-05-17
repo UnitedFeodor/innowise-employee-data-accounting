@@ -1,11 +1,11 @@
-package com.innowise.task3.controller.filter;
+package com.innowise.task3.filter;
 
 import com.innowise.task3.controller.CommandName;
 import com.innowise.task3.controller.CommandProvider;
 import com.innowise.task3.controller.implementation.InvalidRequestExecutor;
 import com.innowise.task3.controller.implementation.LoginExecutor;
-import com.innowise.task3.controller.security.PermissionEvaluator;
-import com.innowise.task3.controller.utils.ControllerUtils;
+import com.innowise.task3.security.PermissionEvaluator;
+import com.innowise.task3.utils.ControllerUtils;
 import com.innowise.task3.entity.dto.EmployeeDTO;
 import com.innowise.task3.service.EmployeeService;
 import com.innowise.task3.service.ServiceException;
